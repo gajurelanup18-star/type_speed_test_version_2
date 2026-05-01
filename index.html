@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>typing speed test</title>
+</head>
+<body bgcolor="white">
+    <h1>typing speed test</h1>
+    <p>type the sentence as fast as you can!!</p>
+    <hr>
+
+    <h3 id="sentence">Click start to begin.</h3>
+
+    <br>
+    <textarea id="user-input" cols="50" rows="4" disabled></textarea>
+    <br><br>
+
+    <button onclick="startTest()">Start</button>
+    <button onclick="checkAnswer()">done</button>
+    <button onclick="resetTest()">Reset</button>
+
+
+    <br><br>
+    <p>Time: <b id="time">0</b> seconds</p>
+    <p>WPM: <b id="wpm">0</b></p>
+    <P>Accuracy: <b id="accuracy">0</b>%</P>
+    <P id="message" style="color:green;"></P>
+    <script>
+        var sentences = [
+            "The quick brown fox jumps over the lazy dog.",
+            "Typing speed tests are a great way to improve your typing skills.",
+            "Practice makes perfect, so keep typing to increase your speed and accuracy.",
+            "The rain in Spain stays mainly in the plain.",
+            "She sells seashells by the seashore."
+        ];
+        var currentSentence = "";
+        var startTime = 0;
+        var myTimer = null;
+        var seconds = 0;
+
+        function startTest() {
+            var random = Math.floor(Math.random() * sentences.length);
+            currentSentence = sentences[random];
+            document.getElementById("sentence").innerText = currentSentence;
+            document.getElementById("user-input").value = "";
+            document.getElementById("user-input").disabled = false;
+            document.getElementById("user-input").focus();
+            document.getElementById("message").innerText = "";
+            document.getElementById("wpm").innerText = "0";
+            document.getElementById("accuracy").innerText = "0";
+            seconds = 0;
+            document.getElementById("time").innerText = "0";
+            startTime = new Date();
+            myTimer = setInterval(function() {
+                seconds = seconds + 1;
+                document.getElementById("time").innerText = seconds;
+            }, 1000);
+        }
+
+        function checkAnswer() {
+            clearInterval(myTimer);
+            var typed = document.getElementById("user-input").value;
+            var timeTaken = seconds;
+        
+
+            // Calculate WPM
+            var wordsCount = typed.trim().split(" ").length;  
+            var wpm = 0;
+            if (timeTaken > 0) {
+                wpm = Math.round((wordsCount / timeTaken) * 60);
+            }
+
+            // Calculate Accuracy
+            var correct = 0;
+            for (var i = 0; i < typed.length; i++) {
+                if (typed[i] === currentSentence[i]) {
+                    correct = correct + 1;
+                }
+            }
+            var accuracy = 0;
+            if (typed.length > 0) {
+                accuracy = Math.round((correct / currentSentence.length) * 100);
+            }
+        
+        document.getElementById("wpm").innerText = wpm;
+        document.getElementById("accuracy").innerText = accuracy;   
+        document.getElementById("message").innerText = "Test completed! Check your results.";
+        document.getElementById("user-input").disabled = true;
+        }
+        function resetTest() {
+            clearInterval(myTimer);
+            document.getElementById("sentence").innerText = "Click start to begin.";
+            document.getElementById("user-input").value = "";
+            document.getElementById("user-input").disabled = true;
+            document.getElementById("time").innerText = "0";
+            document.getElementById("wpm").innerText = "0";
+            document.getElementById("accuracy").innerText = "0";
+            document.getElementById("message").innerText = "";
+            seconds = 0;
+        }
+
+    </script>
+    
+
+
+    
+</body>
+</html>
